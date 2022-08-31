@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import axios from 'axios';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { Pagination, TextField } from '@mui/material';
+import UserProfile from './components/UsersPage/UserProfile';
 
 const url = "https://swapi.dev/api/people/?"
 
@@ -26,17 +27,15 @@ function App() {
 
   return (<div>
     <div className="App">
-    <TextField  
-        id="standard-basic" 
-        variant="standard" 
-        label="Search" 
-        onChange={(e) => setQuery(e.target.value)} 
-    />
-    <Pagination count={pagesCount} page={page} onChange={(_, num) => setPage(num)}/>
-    <Routes>
-      <Route path="/" element={<Navigate to="/home" />}/>
-      <Route path="/home" element={<Home users={users}/>}/>
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/home" element={<Home users={users}
+          count={pagesCount}
+          page={page}
+          setPage={setPage}
+          setQuery={setQuery} />} />
+        <Route path="user/*" element={<UserProfile users={users} />} />
+      </Routes>
     </div>
   </div>
   );
