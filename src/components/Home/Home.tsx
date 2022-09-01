@@ -1,7 +1,17 @@
 import { Pagination, TextField } from "@mui/material"
-import User from "./User"
+import { Users } from "../../types/types"
+import User from "./User/User"
+import "./Home.css"
 
-const Home = ({users, count, page, setPage, setQuery}) => {
+type Props = {
+    users: Array<Users>
+    count: number
+    page: number
+    setPage: (num: number) => void
+    setQuery: (str: string) => void
+}
+
+const Home:React.FC<Props> = ({users, count, page, setPage, setQuery}) => {
     return <div>
         <TextField
         id="standard-basic"
@@ -9,7 +19,7 @@ const Home = ({users, count, page, setPage, setQuery}) => {
         label="Search"
         onChange={(e) => setQuery(e.target.value)}
          />
-        <Pagination count={count} page={page} onChange={(_, num) => setPage(num)} />
+        <Pagination className="pagination" count={count} page={page} onChange={(_, num) => setPage(num)} />
         {users.map(user => <User data={user} key={user.name} />)}
     </div>
 }

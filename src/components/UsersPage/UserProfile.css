@@ -1,0 +1,23 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.cart_user {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 400px;
+    margin-top: 40px;
+}
+
+.cart_user div {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.cart_user span {
+    margin: 0 5px;
+}

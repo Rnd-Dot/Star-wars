@@ -1,24 +1,29 @@
-import './App.css';
-import Home from './components/Home/Home';
+import './App.css'
+import Home from './components/Home/Home'
 import { useEffect, useState } from "react"
-import axios from 'axios';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import { Pagination, TextField } from '@mui/material';
-import UserProfile from './components/UsersPage/UserProfile';
+import axios from 'axios'
+import { Route, Routes, Navigate } from 'react-router-dom'
+import UserProfile from './components/UsersPage/UserProfile'
+import { getUserItem, Users }  from "./types/types"
+import NotFound from './components/Page-404/NotFound'
+import Preloader from './common/Preloader/Preloader'
+import ButtonHome from './components/Button/Button'
 
 const url = "https://swapi.dev/api/people/?"
 
-function App() {
-  const [users, setUsers] = useState([])
+const App = () => {
+  const [users, setUsers] = useState<Array<Users>>([])
   const [page, setPage] = useState(1)
   const [count, setCount] = useState(0)
   const [query, setQuery] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    axios.get(url + `search=${query}&page=${page}`)
+    axios.get<getUserItem>(url + `search=${query}&page=${page}`)
       .then(data => {
         setCount(data.data.count)
         setUsers(data.data.results)
+        setIsLoading(false)
       })
   }, [page, query])
 
@@ -26,7 +31,8 @@ function App() {
 
 
   return (<div>
-    <div className="App">
+    { isLoading ? <Preloader />: (<div className="App">
+      <ButtonHome/>
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Home users={users}
@@ -34,9 +40,10 @@ function App() {
           page={page}
           setPage={setPage}
           setQuery={setQuery} />} />
-        <Route path="user/*" element={<UserProfile users={users} />} />
+        <Route path="user/:id" element={<UserProfile />} />
+        <Route path="*" element={<NotFound />}/>
       </Routes>
-    </div>
+    </div>)}
   </div>
   );
 }
