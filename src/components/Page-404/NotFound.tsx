@@ -1,5 +1,5 @@
 const NotFound = () => {
-    return <div>
+    return <div style={{fontSize: "50px", marginTop: "50px"}}>
         404 NOT FOUND
     </div>
 }
