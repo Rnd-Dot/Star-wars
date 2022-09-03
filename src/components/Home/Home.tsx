@@ -2,7 +2,7 @@ import { Pagination, TextField } from "@mui/material"
 import { Users } from "../../types/types"
 import User from "./User/User"
 import "./Home.css"
-import { historyNames } from "../UsersPage/UserProfile"
+import { useAddSelector } from "../../hooks/hooks"
 
 
 type Props = {
@@ -14,20 +14,29 @@ type Props = {
 }
 
 
-const Home:React.FC<Props> = ({users, count, page, setPage, setQuery}) => {
+const Home: React.FC<Props> = ({ users, count, page, setPage, setQuery }) => {
+    const items = useAddSelector(state => state.history.itemsName)
 
     return <div>
         <TextField
-        id="standard-basic"
-        variant="standard"
-        label="Search"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
-         />
+            id="standard-basic"
+            variant="standard"
+            label="Search"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
+        />
         <Pagination className="pagination" count={count} page={page} onChange={(_, num) => setPage(num)} />
         {users.map(user => <User data={user} key={user.name} />)}
-        <h1>History:</h1>
         <div className="history">
-            {historyNames.map((name, index) => <div key={index}>{name}</div>)}
+            {items.length < 1 ? <div></div> :
+                <div>
+                    <h1>History:</h1>
+                    <div>
+                        {
+                            items.map((name: string, index: number) => <div key={index}>{name}</div>)
+                        }
+                    </div>
+                </div>
+            }
         </div>
     </div>
 }

@@ -1,25 +1,27 @@
 import axios from "axios"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Preloader from "../../common/Preloader/Preloader"
+import { useAddDispatch } from "../../hooks/hooks"
+import { setItemName } from "../../redux/reducer"
 import { Users } from "../../types/types"
 import "./UserProfile.css"
 
 
-export let historyNames:Array<string> = []
 
 
 const UserProfile = () => {
     const [isLoading, setIsLoading] = useState(true)
-    const isMounted = useRef(false)
     const [userData, setUserData] = useState<Users | null>(null)
+    const [name, setName] = useState <any>([])
+
+    const dispatch = useAddDispatch()
+    
 
     const params = useParams()
     const id = Object.values(params)
 
-    const getHistory = (name: string) => {
-        return historyNames.push(name)
-    }
+    
 
     const url = "https://swapi.dev/api/people/"
 
@@ -28,15 +30,19 @@ const UserProfile = () => {
             .then(data => {
                 setUserData(data.data)
                 setIsLoading(false)
-                getHistory(data.data.name)
+                setName(data.data.name)
             })
     }, [])
 
-    useEffect(() => {
-        if(isMounted.current) {
-            sessionStorage.setItem("history", JSON.stringify(historyNames))
+    const getName = (name: string) => {
+        if  (name.length > 0) {
+            return dispatch(setItemName(name))
         }
-        isMounted.current = true
+        else return
+    }
+
+    useEffect(() => {
+        getName(name)
     }, [userData])
 
 
